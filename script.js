@@ -4,43 +4,43 @@ const mensagem = document.getElementById("mensagem");
 const card = document.getElementById("pokemonCard");
 
 form.addEventListener("submit", async function (event) {
-    event.preventDefault(); // impede o form de recarregar a página
+  event.preventDefault(); // impede o form de recarregar a página
 
-    const nome = input.value.toLowerCase().trim();
-    await buscarPokemon(nome);
+  const nome = input.value.toLowerCase().trim();
+  await buscarPokemon(nome);
 });
 
 async function buscarPokemon(nome) {
-    mensagem.textContent = "Buscando...";
-    card.hidden = true;
+  mensagem.textContent = "Buscando...";
+  card.hidden = true;
 
-    try {
-        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${nome}`);
+  try {
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${nome}`); // espera a API responder
 
-        if (!response.ok) {
-            throw new Error("Pokémon não encontrado");
-        }
-
-        const data = await response.json();
-        mostrarPokemon(data);
-        mensagem.textContent = "";
-
-    } catch (erro) {
-        mensagem.textContent = erro.message;
+    if (!response.ok) { // se a resposta NÃO foi ok. (o ! simboliza o não)
+      throw new Error("Pokémon não encontrado");  // cria um erro de propósito e pula pro catch
     }
+
+    const data = await response.json(); // espera a resposta virar objeto
+    mostrarPokemon(data); // mostra os dados na tela
+    mensagem.textContent = ""; // limpa a mensagem de erro antiga
+
+  } catch (erro) { // se algo deu errado no try, cai aqui
+    mensagem.textContent = erro.message; // mostra o texto do erro na tela
+  }
 }
 
 function mostrarPokemon(data) {
-    document.getElementById("pokemonNome").textContent = data.name;
-    document.getElementById("pokemonId").textContent = data.id;
-    document.getElementById("pokemonPeso").textContent = data.weight;
-    document.getElementById("pokemonTipo").textContent = data.types
-        .map(item => item.type.name)
-        .join(", ");
+  document.getElementById("pokemonNome").textContent = data.name;
+  document.getElementById("pokemonId").textContent = data.id;
+  document.getElementById("pokemonPeso").textContent = data.weight;
+  document.getElementById("pokemonTipo").textContent = data.types
+    .map(item => item.type.name)
+    .join(", ");
 
-    const imagem = document.getElementById("pokemonImage");
-    imagem.src = data.sprites.front_default;
-    imagem.alt = `Sprite do ${data.name}`;
+  const imagem = document.getElementById("pokemonImage");
+  imagem.src = data.sprites.front_default;
+  imagem.alt = `Sprite do ${data.name}`;
 
-    card.hidden = false;
+  card.hidden = false;
 }
