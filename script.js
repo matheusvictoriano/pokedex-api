@@ -8,8 +8,16 @@ button.addEventListener("click", function() {
     fetch("https://pokeapi.co/api/v2/pokemon/" + pokemon)
         .then(response => response.json())
         .then(data => {
-            document.getElementById("resultado").textContent = "nome: " + data.name + " id: " + data.id + " peso: " + data.weight;
+            document.getElementById("resultado").textContent = 
+            "nome: " + data.name + 
+            " id: " + data.id + 
+            " peso: " + data.weight + 
+            " tipo: " + data.types[0].type.name;
             console.log(data);
+            console.log(data.types[0].type.name);
+            console.log(data.sprites.front_default);
+            document.getElementById("pokemonImage").src = data.sprites.front_default;
+            document.getElementById("pokemonImage").alt = data.name;
         });
 
 });
