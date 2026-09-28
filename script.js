@@ -1,23 +1,46 @@
+const form = document.getElementById("searchForm");
 const input = document.getElementById("pokemonInput");
-const button = document.getElementById("searchButton");
+const mensagem = document.getElementById("mensagem");
+const card = document.getElementById("pokemonCard");
 
-button.addEventListener("click", function() {
+form.addEventListener("submit", async function (event) {
+    event.preventDefault(); // impede o form de recarregar a página
 
-    const pokemon = input.value;
-
-    fetch("https://pokeapi.co/api/v2/pokemon/" + pokemon)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById("resultado").textContent = 
-            "nome: " + data.name + 
-            " id: " + data.id + 
-            " peso: " + data.weight + 
-            " tipo: " + data.types[0].type.name;
-            console.log(data);
-            console.log(data.types[0].type.name);
-            console.log(data.sprites.front_default);
-            document.getElementById("pokemonImage").src = data.sprites.front_default;
-            document.getElementById("pokemonImage").alt = data.name;
-        });
-
+    const nome = input.value.toLowerCase().trim();
+    await buscarPokemon(nome);
 });
+
+async function buscarPokemon(nome) {
+    mensagem.textContent = "Buscando...";
+    card.hidden = true;
+
+    try {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${nome}`);
+
+        if (!response.ok) {
+            throw new Error("Pokémon não encontrado");
+        }
+
+        const data = await response.json();
+        mostrarPokemon(data);
+        mensagem.textContent = "";
+
+    } catch (erro) {
+        mensagem.textContent = erro.message;
+    }
+}
+
+function mostrarPokemon(data) {
+    document.getElementById("pokemonNome").textContent = data.name;
+    document.getElementById("pokemonId").textContent = data.id;
+    document.getElementById("pokemonPeso").textContent = data.weight;
+    document.getElementById("pokemonTipo").textContent = data.types
+        .map(item => item.type.name)
+        .join(", ");
+
+    const imagem = document.getElementById("pokemonImage");
+    imagem.src = data.sprites.front_default;
+    imagem.alt = `Sprite do ${data.name}`;
+
+    card.hidden = false;
+}

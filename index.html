@@ -7,18 +7,30 @@
 </head>
 
 <body>
+    <header>
+        <h1>Minha Pokédex</h1>
+    </header>
 
-    <h1>Minha Pokédex</h1>
+    <main>
+        <form id="searchForm">
+            <label for="pokemonInput">Nome do Pokémon</label>
+            <input id="pokemonInput" type="text" placeholder="Ex: pikachu" required>
+            <button type="submit">Pesquisar</button>
+        </form>
 
-    <input id="pokemonInput" type="text" placeholder="Digite um Pokémon">
+        <p id="mensagem" role="status"></p>
 
-    <button id="searchButton">Pesquisar</button>
-
-    <p id="resultado">teste</p>
-
-    <img id="pokemonImage" alt = ""> 
+        <article id="pokemonCard" hidden>
+            <h2 id="pokemonNome"></h2>
+            <img id="pokemonImage" alt="">
+            <ul>
+                <li>ID: <span id="pokemonId"></span></li>
+                <li>Peso: <span id="pokemonPeso"></span></li>
+                <li>Tipo: <span id="pokemonTipo"></span></li>
+            </ul>
+        </article>
+    </main>
 
     <script src="script.js"></script>
-
 </body>
 </html>
